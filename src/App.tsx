@@ -100,9 +100,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Ensure correct authentication routing */}
         <Route path="/auth" element={!user ? <AuthPage /> : <Navigate to="/" />} />
         <Route path="/" element={!user ? <Navigate to="/auth" /> : null} />
+        {/* 🔹 Catch-all route to prevent 404 errors on Vercel */}
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </Router>
   );
