@@ -85,9 +85,9 @@ function App() {
 
     if (user) {
       console.log("✅ Redirecting to external site...");
-      window.location.href = "https://voice-based-pnhfpn52i-nisargahgowdas-projects.vercel.app";
+      window.location.href = "https://voice-based-app.vercel.app";
     }
-  }, [user]); // ✅ Redirect only when user state changes
+  }, [user]);
 
   if (loading) {
     return (
@@ -100,6 +100,7 @@ function App() {
   return (
     <Router>
       <Routes>
+        {/* Ensure correct authentication routing */}
         <Route path="/auth" element={!user ? <AuthPage /> : <Navigate to="/" />} />
         <Route path="/" element={!user ? <Navigate to="/auth" /> : null} />
       </Routes>
