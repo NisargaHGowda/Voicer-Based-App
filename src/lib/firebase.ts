@@ -41,7 +41,7 @@
 // export { auth };
 
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -52,10 +52,16 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// ✅ Expose auth to the window for debugging
+// ✅ Set authentication persistence
+setPersistence(auth, browserLocalPersistence)
+  .then(() => console.log("✅ Auth persistence enabled"))
+  .catch((error) => console.error("❌ Auth persistence error:", error));
+
+// ✅ Expose Firebase auth globally for debugging
 (window as any).firebaseAuth = auth;
 
 export { auth };
