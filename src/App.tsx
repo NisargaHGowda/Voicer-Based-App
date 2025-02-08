@@ -70,16 +70,11 @@
 // }
 
 // export default App;
-
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./lib/firebase";
 import AuthPage from "./components/AuthPage";
-import { signOut } from "firebase/auth";
-
-signOut(auth).then(() => console.log("✅ Signed out successfully"));
-
 
 function App() {
   const [user, loading] = useAuthState(auth);
@@ -87,7 +82,12 @@ function App() {
   useEffect(() => {
     console.log("🔍 User state:", user);
     console.log("⏳ Loading state:", loading);
-  }, [user, loading]);
+
+    if (user) {
+      console.log("✅ Redirecting to external site...");
+      window.location.href = "https://voice-based-pnhfpn52i-nisargahgowdas-projects.vercel.app";
+    }
+  }, [user]); // ✅ Redirect only when user state changes
 
   if (loading) {
     return (
@@ -101,21 +101,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/auth" element={!user ? <AuthPage /> : <Navigate to="/" />} />
-        <Route
-          path="/"
-          element={
-            user ? (
-              (() => {
-                console.log("✅ Redirecting to external site...");
-                window.location.href =
-                  "https://voice-based-pnhfpn52i-nisargahgowdas-projects.vercel.app";
-                return null;
-              })()
-            ) : (
-              <Navigate to="/auth" />
-            )
-          }
-        />
+        <Route path="/" element={!user ? <Navigate to="/auth" /> : null} />
       </Routes>
     </Router>
   );
